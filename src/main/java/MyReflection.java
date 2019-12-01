@@ -90,12 +90,12 @@ public class MyReflection{
  * clorit - строка если в которой записано либо слово "class" либо "interface"
  * Возвращает массив интерфейсов
  */
-    private Class[] getInterf(Class CurClass, String clorit)
+    private Class[] getInterf(Class CurClass)
     {
         Class[] InterfaceT = new Class[0];
         InterfaceT = CurClass.getInterfaces();
         if (InterfaceT.length>0) {
-            if (clorit == "interface")
+            if (CurClass.isInterface())
             {
                 isertBuf("extends");
             }
@@ -186,21 +186,28 @@ public class MyReflection{
 * BaseClass - класс который необходимо исследовать
 * clorit - если передается класс то следует указать class, если интерфейс то interface
  */
-    private void get_classInfo(Class BaseClass, String clorit)
+    private void get_classInfo(Class BaseClass)
     {
+
         Class Super = null;
         Class[] InterfaceT = new Class[0];
         //Ищем модификатор класса
         choise_modifier(BaseClass.getModifiers());
-        //Выводим название класса
-        isertBuf(clorit);
-        isertBuf(BaseClass.getName());
         //Ищем предка если исследуем класс
-        if (clorit != "interface") {
+        if (!BaseClass.isInterface()) {
+            //Выводим название класса
+            isertBuf("class");
+            isertBuf(BaseClass.getName());
             Super = getSuper(BaseClass);
         }
+        else
+        {
+            //Выводим название интерфейса
+            isertBuf("interface");
+            isertBuf(BaseClass.getName());
+        }
         //Ищем интерфейс
-        InterfaceT = getInterf(BaseClass,clorit);
+        InterfaceT = getInterf(BaseClass);
         isertBuf("{\n");
         //Ищем поля класса
         getFieldsClass(BaseClass);
@@ -210,23 +217,24 @@ public class MyReflection{
         //Если есть родитель то ищем все его поля, методы и т.д.
         if (Super != null) {
             if (Super.getName() != "java.lang.Object") {
-                get_classInfo(Super, "class");
+                get_classInfo(Super);
             }
          }
         //Если у интерфейса есть предок то ищем все его поля
         if (InterfaceT.length != 0)
         {
+            boolean asd = InterfaceT[0].isInterface();
             for(int i = 0; i<InterfaceT.length; i++)
-                get_classInfo(InterfaceT[i],"interface");
+                get_classInfo(InterfaceT[i]);
         }
     }
 
 
-    public void startReflect(Class BaseClass, String clinter)
+    public void startReflect(Class BaseClass)
     {
         Logger logger = getLogger(MyReflection.class);
         logger.info("Start Reflection");
-        get_classInfo(BaseClass, clinter);
+        get_classInfo(BaseClass);
         logger.info("\n" + this.bufReflect.toString());
         logger.info("Stop Reflection");
     }
