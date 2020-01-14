@@ -3,18 +3,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-public class CustomProxyClass {
+//public class CustomProxyClass {
     interface If {
         void originalMethod(String s);
     }
 
-    static class Original implements If {
+    class Original implements If {
         public void originalMethod(String s) {
             System.out.println(s);
         }
     }
 
-    static class Handler implements InvocationHandler {
+     class Handler implements InvocationHandler {
         private final If original;
 
         public Handler(If original) {
@@ -30,4 +30,4 @@ public class CustomProxyClass {
             return null;
         }
     }
-}
+//}

@@ -1,13 +1,13 @@
 public class ForTest implements interTest {
-   public String strTest;
-   public int numTest;
-   private void funcTestOne(int k)
+    public String strTest;
+    public int numTest;
+    private void funcTestOne(int k)
     {
         k++;
     }
 
     public String funcTestTwo(String st) {
-        st = "privet Duck";
+        st = "privet " + st;
         System.out.println(st);
         return st;
     }

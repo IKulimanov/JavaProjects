@@ -7,7 +7,11 @@ import java.lang.reflect.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 
-
+/**
+ * Класс реализующий рефлекию
+ * @author Kulimanov Ivan
+ * @version 1.0
+ */
 public class MyReflection{
     /*Буфер хранящий всю информацию о исследуемом классе*/
     StringBuffer bufReflect;
@@ -25,8 +29,10 @@ public class MyReflection{
         this.bufReflect = new StringBuffer("");
         this.lengthBuf = 0;
     }
-/*
+/**
  *Поиск модификатора класса, функция добавляет в буфер модификатор
+ * @param numModificator - модификатор типа int
+ * @see MyReflection#MyReflection()
  */
     private void choise_modifier(int numModificator)
     {
@@ -46,10 +52,10 @@ public class MyReflection{
             isertBuf("static");
         }
     }
-/*
+/**
 * Функция добавляет в стринг буфер строку и возвращает смещение
-* newStr - строка которую необходимо добавить
-* возвращает удачность выполнения
+* @param newStr - строка которую необходимо добавить
+* @return  true - записано в буфер, false - не записано в буфер
  */
     private boolean isertBuf(String newStr)
     {
@@ -65,10 +71,10 @@ public class MyReflection{
         this.lengthBuf = this.bufReflect.length();
         return true;
     }
-/*
+/**
  *Поиск наследуемого класса
- * CurClass - класс у которого ищется интерфейс
- * Возвращает предка
+ *@param  CurClass - класс у которого ищется интерфейс
+ *@return  Возвращает предка типа Class
  */
     private Class getSuper(Class CurClass)
     {
@@ -84,11 +90,10 @@ public class MyReflection{
         return Super;
     }
 
-/*
+/**
  *Поиск интерфейса у класса
- * CurClass - класс у которого ищется интерфейс
- * clorit - строка если в которой записано либо слово "class" либо "interface"
- * Возвращает массив интерфейсов
+ *@param  CurClass - класс у которого ищется интерфейс
+ *@return  Возвращает массив интерфейсов Class[]
  */
     private Class[] getInterf(Class CurClass)
     {
@@ -113,15 +118,16 @@ public class MyReflection{
         }
         return InterfaceT;
     }
-/*
-*Получение полей класса
-* CurClass - класс у которого ищутся поля
+/**
+* Получение полей класса
+*@param  CurClass - класс у которого ищутся поля
  */
     private void getFieldsClass(Class CurClass)
     {
         Field[] FieldsClass;
         FieldsClass = CurClass.getDeclaredFields();
         for ( int i=0;FieldsClass.length>i;i++ ) {
+            isertBuf("  ");
             choise_modifier(FieldsClass[i].getModifiers());
             isertBuf(FieldsClass[i].getType().getSimpleName());
             isertBuf(FieldsClass[i].getName());
@@ -129,15 +135,16 @@ public class MyReflection{
         }
     }
 
-/*
+/**
  * Поиск методов в классе
- * CurClass - класс у которого ищутся методы
+ *@param  CurClass - класс у которого ищутся методы
  */
     private void getMeth(Class CurClass)
     {
         Method[] MethodsT;
         MethodsT = CurClass.getDeclaredMethods();
         for(int i = 0; i< MethodsT.length; i++) {
+            isertBuf("  ");
             getAnnot(MethodsT[i]);
             choise_modifier(MethodsT[i].getModifiers());
             isertBuf(MethodsT[i].getReturnType().getSimpleName());
@@ -145,9 +152,9 @@ public class MyReflection{
             getParamType(MethodsT[i]);
         }
     }
-/*
+/**
  *Поиск параметров метода
- * Meth -  метод
+ *@param  Meth -  метод параметры которого будут добавленны в буфер
  */
     private void getParamType(Method Meth)
     {
@@ -167,9 +174,9 @@ public class MyReflection{
             isertBuf(")\n");
         }
     }
-/*
+/**
  *Поиск аннтотаций
- * Meth - метод у которого ищется аннотация
+ *@param  Meth - метод у которого ищется аннотация и записывается в буфер
  */
     private void getAnnot( Method Meth)
     {
@@ -181,10 +188,9 @@ public class MyReflection{
         }
     }
 
-/*
+/**
 * Функция выводит в консоль класс, все его поля и методы, а так же интерфейс и классы которые он наследует
-* BaseClass - класс который необходимо исследовать
-* clorit - если передается класс то следует указать class, если интерфейс то interface
+*@param  BaseClass - класс который необходимо исследовать
  */
     private void get_classInfo(Class BaseClass)
     {
@@ -229,13 +235,17 @@ public class MyReflection{
         }
     }
 
+    /**
+     * Запуск рефлексии результат будет выведен логом в консоль
+     * @param BaseClass - класс который удет подвержен рефлексии
+     */
 
     public void startReflect(Class BaseClass)
     {
         Logger logger = getLogger(MyReflection.class);
         logger.info("Start Reflection");
         get_classInfo(BaseClass);
-        logger.info("\n" + this.bufReflect.toString());
+        logger.info("\n " + this.bufReflect.toString());
         logger.info("Stop Reflection");
     }
 

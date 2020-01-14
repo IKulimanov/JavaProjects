@@ -15,5 +15,7 @@ public class GenericT<T>  {
         String showType() {
             return "Тип T: " + ob.getClass().getSimpleName();
         }
-
+        public <G> void print(G item){
+            System.out.println(item);
+        }
 }

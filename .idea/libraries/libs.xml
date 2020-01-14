@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/slf4j-api-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/javassist-3.26.0-GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/slf4j-simple-1.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
